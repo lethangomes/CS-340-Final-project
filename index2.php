@@ -78,7 +78,7 @@
                                 echo "<tbody>";
                                 while($row = mysqli_fetch_array($result)){
                                     echo "<tr>";
-                                        echo "<td><a href='viewDecks.php?Username=". $row['Username'].">" . $row['Username'] . "</a></td>";
+                                        echo "<td><a href='viewDecks.php?Username=". $row['Username'] ."'>" . $row['Username'] . "</a></td>";
                                         echo "<td>" . $row['IsDeveloper'] . "</td>";									
                                     echo "</tr>";
                                 }

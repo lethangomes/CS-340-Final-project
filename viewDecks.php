@@ -66,18 +66,16 @@ if(isset($_SESSION["Username"]) ){
 				echo "<table class='table table-bordered table-striped'>";
                     echo "<thead>";
                         echo "<tr>";
-                            echo "<th width = 20%>Project Number</th>";
-                            echo "<th>Project Name</th>";
-                            echo "<th>Hours</th>";
+                            echo "<th>Deckname</th>";
+                            echo "<th>Format</th>";
                         echo "</tr>";
                     echo "</thead>";
                     echo "<tbody>";							
 				// output data of each row
                     while($row = mysqli_fetch_array($result)){
                         echo "<tr>";
-                        echo "<td>" . $row['Pnumber'] . "</td>";
-                        echo "<td>" . $row['Pname'] . "</td>";
-                        echo "<td>" . $row['Hours'] . "</td>";
+                        echo "<td>" . $row['DeckName'] . "</td>";
+                        echo "<td>" . $row['Format'] . "</td>";
     
                         echo "</tr>";
                     }
