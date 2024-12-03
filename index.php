@@ -72,6 +72,7 @@
                                 echo "<thead>";
                                     echo "<tr>";
                                         echo "<th >Name</th>";
+                                        echo "<th >Abilities</th>";
                                         echo "<th >Flavor</th>";
                                         echo "<th >Power</th>";
                                         echo "<th >Toughness</th>";
@@ -83,6 +84,27 @@
                                 while($row = mysqli_fetch_array($result)){
                                     echo "<tr>";
                                         echo "<td>" . $row['Name'] . "</td>";
+                                        echo "<td><ul>";
+                                    //get abilities
+                                    $sql_get_abilities = "  SELECT * 
+                                                            FROM ABILITY AS A
+                                                            WHERE A.id in (
+                                                                SELECT id
+                                                                FROM HASABILITY
+                                                                WHERE Name = ?)";
+                                    if($stmt = mysqli_prepare($link, $sql_get_abilities)){
+                                        mysqli_stmt_bind_param($stmt, "s", $row['Name']);
+                                        
+                                        if(mysqli_stmt_execute($stmt)){
+                                            $abilities = mysqli_stmt_get_result($stmt);
+                                            if(mysqli_num_rows($result) > 0){
+                                                while($ability = mysqli_fetch_array($abilities)){
+                                                    echo "<li><b>" . $ability['Name'] . "</b> - " . $ability['Description'] . "</li>";
+                                                }
+                                            }
+                                        }
+                                    }
+                                        echo "</ul></td>";
                                         echo "<td>" . $row['Flavor'] . "</td>";
                                         echo "<td>" . $row['Power'] . "</td>";
 										echo "<td>" . $row['Toughness'] . "</td>";									
