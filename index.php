@@ -72,6 +72,7 @@
                                 echo "<thead>";
                                     echo "<tr>";
                                         echo "<th >Name</th>";
+                                        echo "<th >Type</th>";
                                         echo "<th >Abilities</th>";
                                         echo "<th >Flavor</th>";
                                         echo "<th >Power</th>";
@@ -84,7 +85,61 @@
                                 while($row = mysqli_fetch_array($result)){
                                     echo "<tr>";
                                         echo "<td>" . $row['Name'] . "</td>";
-                                        echo "<td><ul>";
+                                        echo "<td>";
+                                    
+                                    //get types
+                                    $sql_get_types = "  SELECT * 
+                                            FROM SUPERTYPES AS T
+                                            WHERE T.Card_NAME = ?";
+                                    if($stmt = mysqli_prepare($link, $sql_get_types)){
+                                        mysqli_stmt_bind_param($stmt, "s", $row['Name']);
+                                        
+                                        if(mysqli_stmt_execute($stmt)){
+                                            $types = mysqli_stmt_get_result($stmt);
+                                            if(mysqli_num_rows($types) > 0){
+                                                while($type = mysqli_fetch_array($types)){
+                                                    echo "" . $type['Typename'] . " ";
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    $sql_get_types = "  SELECT * 
+                                            FROM TYPES AS T
+                                            WHERE T.Card_NAME = ?";
+                                    if($stmt = mysqli_prepare($link, $sql_get_types)){
+                                        mysqli_stmt_bind_param($stmt, "s", $row['Name']);
+                                        
+                                        if(mysqli_stmt_execute($stmt)){
+                                            $types = mysqli_stmt_get_result($stmt);
+                                            if(mysqli_num_rows($types) > 0){
+                                                while($type = mysqli_fetch_array($types)){
+                                                    echo "" . $type['Typename'] . " ";
+                                                }
+                                            }
+                                        }
+                                    }
+                                    
+                                    //get subtypes
+                                    $sql_get_types = "  SELECT * 
+                                            FROM SUB_TYPES AS T
+                                            WHERE T.Card_NAME = ?";
+                                    if($stmt = mysqli_prepare($link, $sql_get_types)){
+                                        mysqli_stmt_bind_param($stmt, "s", $row['Name']);
+                                        
+                                        if(mysqli_stmt_execute($stmt)){
+                                            $types = mysqli_stmt_get_result($stmt);
+                                            if(mysqli_num_rows($types) > 0){
+                                                while($type = mysqli_fetch_array($types)){
+                                                    if($type['Typename'] != "Instant" && $type['Typename'] != "Artifact")
+                                                    echo "" . $type['Typename'] . " ";
+                                                }
+                                            }
+                                        }
+                                    }
+                                    echo "</td>";
+
+                                    echo "<td><ul>";
                                     //get abilities
                                     $sql_get_abilities = "  SELECT * 
                                                             FROM ABILITY AS A
@@ -109,7 +164,7 @@
                                         echo "<td>" . $row['Power'] . "</td>";
 										echo "<td>" . $row['Toughness'] . "</td>";									
 										echo "<td>" . $row['Artist'] . "</td>";
-                                        echo "<td>" . $row['Price'] . "</td>";										
+                                        echo "<td>$" . $row['Price'] . "</td>";										
                                     echo "</tr>";
                                 }
                                 echo "</tbody>";                            
