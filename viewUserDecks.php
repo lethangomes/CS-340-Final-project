@@ -36,30 +36,10 @@
                 <div class="col-md-12">
                     <div class="page-header clearfix">
                         <h2 class="pull-left">View Decks</h2>
-                        <form method = "post">
-                            <input class="btn btn-success pull-right" type = "submit" name = "addDeck" value = "Add Deck"/>
-                        </form>
+                        <a href="addDeck.php" class="btn btn-success pull-right">Add Deck</a>
                     </div>
 <?php
 
-//prompt function
-function prompt($prompt_msg){
-    echo("<script type='text/javascript'> var answer = prompt('".$prompt_msg."'); </script>");
-
-    $answer = "<script type='text/javascript'> document.write(answer); </script>";
-    return($answer);
-}
-
-// Check existence of id parameter before processing further
-if(isset($_GET["Username"]) && !empty(trim($_GET["Username"]))){
-	$_SESSION["Username"] = $_GET["Username"];
-}
-
-if(isset($_POST['addDeck'])){
-    prompt("Enter name of deck you want to add");
-    
-    
-}
 
 if(isset($_SESSION["Username"]) ){
 	
