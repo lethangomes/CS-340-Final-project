@@ -83,7 +83,7 @@
                                         $user_type = "Developer";
                                     }
                                     echo "<tr>";
-                                        echo "<td><a href='viewDecks.php?Username=". $row['Username'] ."'>" . $row['Username'] . "</a></td>";
+                                        echo "<td><a href='viewUserDecks.php?Username=". $row['Username'] ."'>" . $row['Username'] . "</a></td>";
                                         echo "<td>" . $user_type . "</td>";
                                         echo "<td>".$row['NumDecks']."</td>";									
                                     echo "</tr>";
