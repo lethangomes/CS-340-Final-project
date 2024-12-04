@@ -7,7 +7,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>View Deck</title>
+    <title>View Projects</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js"></script>
@@ -35,7 +35,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="page-header clearfix">
-                        <h2 class="pull-left">View Deck</h2>
+                        <h2 class="pull-left">View Decks</h2>
+						<a href="addProject.php" class="btn btn-success pull-right">Add Deck</a>
                     </div>
 <?php
 
@@ -44,40 +45,37 @@ if(isset($_GET["Username"]) && !empty(trim($_GET["Username"]))){
 	$_SESSION["Username"] = $_GET["Username"];
 }
 
-if(isset($_GET["DeckName"]) && !empty(trim($_GET["DeckName"]))){
-	$_SESSION["DeckName"] = $_GET["DeckName"];
-}
-
-if(isset($_SESSION["Username"]) && isset($_SESSION["DeckName"])){
+if(isset($_SESSION["Username"]) ){
+	
     // Prepare a select statement
-    $sql = "SELECT CardName, NumCopies FROM INCLUDES WHERE Username= ? AND DeckName= ?" ;
+    $sql = "SELECT DeckName, Format FROM DECK WHERE Username= ?" ;
 
+	//$sql = "SELECT EUsername, Pno, Hours From WORKS_ON WHERE EUsername = ? ";   
     if($stmt = mysqli_prepare($link, $sql)){
         // Bind variables to the prepared statement as parameters
-        mysqli_stmt_bind_param($stmt, "ss", $param_Username, $param_DeckName);      
+        mysqli_stmt_bind_param($stmt, "s", $param_Username);      
         // Set parameters
        $param_Username = $_SESSION["Username"];
-       $param_DeckName = $_SESSION["DeckName"];
-    
+
         // Attempt to execute the prepared statement
         if(mysqli_stmt_execute($stmt)){
             $result = mysqli_stmt_get_result($stmt);
     
-			echo"<h4>".$param_DeckName."</h4><p>";
+			echo"<h4> Decks for ".$param_Username."</h4><p>";
 			if(mysqli_num_rows($result) > 0){
 				echo "<table class='table table-bordered table-striped'>";
                     echo "<thead>";
                         echo "<tr>";
-                            echo "<th>Card</th>";
-                            echo "<th>Copies</th>";
+                            echo "<th>Deckname</th>";
+                            echo "<th>Format</th>";
                         echo "</tr>";
                     echo "</thead>";
                     echo "<tbody>";							
 				// output data of each row
                     while($row = mysqli_fetch_array($result)){
                         echo "<tr>";
-                        echo "<td>" . $row['CardName'] . "</td>";
-                        echo "<td>" . $row['NumCopies'] . "</td>";
+                        echo "<td>" . $row['DeckName'] . "</td>";
+                        echo "<td>" . $row['Format'] . "</td>";
     
                         echo "</tr>";
                     }
@@ -85,7 +83,7 @@ if(isset($_SESSION["Username"]) && isset($_SESSION["DeckName"])){
                 echo "</table>";				
 				mysqli_free_result($result);
 			} else {
-				echo "No cards. ";
+				echo "No Projects. ";
 			}
 //				mysqli_free_result($result);
         } else{
