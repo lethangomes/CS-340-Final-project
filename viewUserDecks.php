@@ -90,7 +90,7 @@ if(isset($_SESSION["Username"]) ){
 				// output data of each row
                     while($row = mysqli_fetch_array($result)){
                         echo "<tr>";
-                        echo "<td>" . $row['DeckName'] . "</td>";
+                        echo "<td><a href='viewDeck.php?Username=" . $param_Username . "&DeckName=" .$row['DeckName']. "'>" . $row['DeckName'] . "</a></td>";
                         echo "<td>" . $row['Format'] . "</td>";
     
                         echo "</tr>";
