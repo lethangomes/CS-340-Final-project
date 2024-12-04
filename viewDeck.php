@@ -48,6 +48,23 @@ if(isset($_GET["DeckName"]) && !empty(trim($_GET["DeckName"]))){
 	$_SESSION["DeckName"] = $_GET["DeckName"];
 }
 
+if(isset($_GET["CardName"]) && isset($_GET["NumCopies"])) {
+
+    // Prepare a select statement
+    $sql = "SELECT CardName, NumCopies FROM INCLUDES WHERE Username= ? AND DeckName= ?" ;
+
+    if($stmt = mysqli_prepare($link, $sql)) {
+        // Bind variables to the prepared statement as parameters
+        mysqli_stmt_bind_param($stmt, "si", $param_CardName, $param_NumCopies);      
+        // Set parameters
+        $param_CardName = $_SESSION["CardName"];
+        $param_NumCopies = $_SESSION["NumCopies"];
+
+        // execute update
+        mysqli_stmt_execute($stmt);
+    }
+}
+
 if(isset($_SESSION["Username"]) && isset($_SESSION["DeckName"])){
     // Prepare a select statement
     $sql = "SELECT CardName, NumCopies FROM INCLUDES WHERE Username= ? AND DeckName= ?" ;
@@ -78,7 +95,10 @@ if(isset($_SESSION["Username"]) && isset($_SESSION["DeckName"])){
                         echo "<tr>";
                         echo "<td>" . $row['CardName'] . "</td>";
                         echo "<td>" . $row['NumCopies'] . "</td>";
-    
+                        echo "<td>";
+                            echo "<a href='viewDeck.php?CardName=". $row['CardName']."&NumCopies=". ($row['NumCopies'] + 1) ."' title='Increase Copies' data-toggle='tooltip'><span class='glyphicon glyphicon-eye-open'></span></a>";
+
+                        echo "</td>";
                         echo "</tr>";
                     }
                     echo "</tbody>";                            
