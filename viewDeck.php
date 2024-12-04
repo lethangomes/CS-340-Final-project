@@ -105,7 +105,7 @@ if(isset($_SESSION["Username"]) && isset($_SESSION["DeckName"])){
     exit();
 }
 ?>					                 					
-	<p><a href="index.php" class="btn btn-primary">Back</a></p>
+	<p><a href="viewUserDecks.php" class="btn btn-primary">Back</a></p>
     </div>
    </div>        
   </div>
