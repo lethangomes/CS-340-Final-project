@@ -48,17 +48,20 @@ if(isset($_GET["DeckName"]) && !empty(trim($_GET["DeckName"]))){
 	$_SESSION["DeckName"] = $_GET["DeckName"];
 }
 
-if(isset($_GET["CardName"]) && isset($_GET["NumCopies"])) {
+if(isset($_GET["CardName"]) && isset($_GET["NumCopies"]) && isset($_SESSION["Username"]) && isset($_SESSION["DeckName"])) {
 
     // Prepare a select statement
-    $sql = "SELECT CardName, NumCopies FROM INCLUDES WHERE Username= ? AND DeckName= ?" ;
+    $sql = "UPDATE INCLUDES SET NumCopies = ? WHERE CardName = ? AND DeckName = ? AND Username = ?" ;
 
     if($stmt = mysqli_prepare($link, $sql)) {
         // Bind variables to the prepared statement as parameters
-        mysqli_stmt_bind_param($stmt, "si", $param_CardName, $param_NumCopies);      
+        mysqli_stmt_bind_param($stmt, "isss", $param_NumCopies, $param_CardName, $param_DeckName, $param_Username);      
         // Set parameters
-        $param_CardName = $_SESSION["CardName"];
-        $param_NumCopies = $_SESSION["NumCopies"];
+        $param_CardName = $_GET["CardName"];
+        $param_NumCopies = $_GET["NumCopies"];
+        $param_DeckName = $_SESSION["DeckName"];
+        $param_Username = $_SESSION["Username"];
+
 
         // execute update
         mysqli_stmt_execute($stmt);
@@ -96,8 +99,8 @@ if(isset($_SESSION["Username"]) && isset($_SESSION["DeckName"])){
                         echo "<td>" . $row['CardName'] . "</td>";
                         echo "<td>" . $row['NumCopies'] . "</td>";
                         echo "<td>";
-                            echo "<a href='viewDeck.php?CardName=". $row['CardName']."&NumCopies=". ($row['NumCopies'] + 1) ."' title='Increase Copies' data-toggle='tooltip'><span class='glyphicon glyphicon-eye-open'></span></a>";
-
+                            echo "<a href='viewDeck.php?CardName=". $row['CardName']."&NumCopies=". ($row['NumCopies'] + 1) ."' title='Increase Copies' data-toggle='tooltip'><span class='glyphicon glyphicon-plus'></span></a>";
+                            echo "<a href='viewDeck.php?CardName=". $row['CardName']."&NumCopies=". ($row['NumCopies'] - 1) ."' title='Decrease Copies' data-toggle='tooltip'><span class='glyphicon glyphicon-minus'></span></a>";
                         echo "</td>";
                         echo "</tr>";
                     }
