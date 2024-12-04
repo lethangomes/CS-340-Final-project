@@ -61,7 +61,7 @@ if(isset($_POST['addDeck'])){
     
 }
 
-if(isset($_SESSION["Username"]) ){
+if(isset($_SESSION["Username"]) || isset($_GET["Username"])){
 	
     // Prepare a select statement
     $sql = "SELECT DeckName, Format FROM DECK WHERE Username= ?" ;
@@ -71,7 +71,12 @@ if(isset($_SESSION["Username"]) ){
         // Bind variables to the prepared statement as parameters
         mysqli_stmt_bind_param($stmt, "s", $param_Username);      
         // Set parameters
-       $param_Username = $_SESSION["Username"];
+        if(isset($_GET["Username"])){
+            $param_Username = $_GET["Username"];
+        }
+        else{
+            $param_Username = $_SESSION["Username"];
+        }
 
         // Attempt to execute the prepared statement
         if(mysqli_stmt_execute($stmt)){
