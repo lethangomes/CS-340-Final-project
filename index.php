@@ -64,7 +64,7 @@
 						$sql = "SELECT Ssn,Fname,Lname,Salary, Address, Bdate, PayLevel(Ssn) as Level, Super_ssn, Dno
 							FROM EMPLOYEE";
 					*/
-                    $sql = "SELECT *
+                    $sql = "SELECT Username, IsDeveloper, NumDecks(Username) AS NumDecks
 							FROM USER";
                     if($result = mysqli_query($link, $sql)){
                         if(mysqli_num_rows($result) > 0){
@@ -73,6 +73,7 @@
                                     echo "<tr>";
                                         echo "<th >Username</th>";
                                         echo "<th >Type</th>";
+                                        echo "<th> Number of Decks</th>";
                                     echo "</tr>";
                                 echo "</thead>";
                                 echo "<tbody>";
@@ -83,7 +84,8 @@
                                     }
                                     echo "<tr>";
                                         echo "<td><a href='viewDecks.php?Username=". $row['Username'] ."'>" . $row['Username'] . "</a></td>";
-                                        echo "<td>" . $user_type . "</td>";									
+                                        echo "<td>" . $user_type . "</td>";
+                                        echo "<td>".$row['NumDecks']."</td>";									
                                     echo "</tr>";
                                 }
                                 echo "</tbody>";                            
