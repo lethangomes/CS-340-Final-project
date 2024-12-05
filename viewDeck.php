@@ -48,6 +48,8 @@ if(isset($_GET["DeckName"]) && !empty(trim($_GET["DeckName"]))){
 	$_SESSION["DeckName"] = $_GET["DeckName"];
 }
 
+
+// update numcopies
 if(isset($_GET["CardName"]) && isset($_GET["NumCopies"]) && isset($_SESSION["Username"]) && isset($_SESSION["DeckName"])) {
 
     // Prepare a select statement
@@ -59,6 +61,27 @@ if(isset($_GET["CardName"]) && isset($_GET["NumCopies"]) && isset($_SESSION["Use
         // Set parameters
         $param_CardName = $_GET["CardName"];
         $param_NumCopies = $_GET["NumCopies"];
+        $param_DeckName = $_SESSION["DeckName"];
+        $param_Username = $_SESSION["Username"];
+
+
+        // execute update
+        mysqli_stmt_execute($stmt);
+    }
+}
+
+
+// delete 
+if(isset($_GET["CardName"]) && isset($_GET["Delete"]) && isset($_SESSION["Username"]) && isset($_SESSION["DeckName"])) {
+
+    // Prepare a select statement
+    $sql = "DELETE FROM INCLUDES WHERE CardName = ? AND DeckName = ? AND Username = ?" ;
+
+    if($stmt = mysqli_prepare($link, $sql)) {
+        // Bind variables to the prepared statement as parameters
+        mysqli_stmt_bind_param($stmt, "sss", $param_CardName, $param_DeckName, $param_Username);      
+        // Set parameters
+        $param_CardName = $_GET["CardName"];
         $param_DeckName = $_SESSION["DeckName"];
         $param_Username = $_SESSION["Username"];
 
@@ -101,6 +124,7 @@ if(isset($_SESSION["Username"]) && isset($_SESSION["DeckName"])){
                         echo "<td>";
                             echo "<a href='viewDeck.php?CardName=". $row['CardName']."&NumCopies=". ($row['NumCopies'] + 1) ."' title='Increase Copies' data-toggle='tooltip'><span class='glyphicon glyphicon-plus'></span></a>";
                             echo "<a href='viewDeck.php?CardName=". $row['CardName']."&NumCopies=". ($row['NumCopies'] - 1) ."' title='Decrease Copies' data-toggle='tooltip'><span class='glyphicon glyphicon-minus'></span></a>";
+                            echo "<a href='viewDeck.php?CardName=". $row['CardName']."&Delete=". ('DOIT') ."' title='Remove Card' data-toggle='tooltip'><span class='glyphicon glyphicon-trash'></span></a>";
                         echo "</td>";
                         echo "</tr>";
                     }
