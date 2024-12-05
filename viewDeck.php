@@ -49,6 +49,14 @@ if(isset($_GET["DeckName"]) && !empty(trim($_GET["DeckName"]))){
 }
 
 if(isset($_SESSION["Username"]) && isset($_SESSION["DeckName"])){
+    if(isset($_GET["CardName"])){
+        $sql = "INSERT INTO INCLUDES (NumCopies, CardName, DeckName, Username) 
+                VALUES (1, '".$_GET["CardName"]."', '".$_SESSION["DeckName"]."', '".$_SESSION["Username"]."')";
+        if(!($result = mysqli_query($link, $sql))){
+            echo "<p>Card already added</p>";
+        } 
+    }
+
     // Prepare a select statement
     $sql = "SELECT CardName, NumCopies FROM INCLUDES WHERE Username= ? AND DeckName= ?" ;
 
@@ -105,7 +113,8 @@ if(isset($_SESSION["Username"]) && isset($_SESSION["DeckName"])){
     exit();
 }
 ?>					                 					
-	<p><a href="viewUserDecks.php" class="btn btn-primary">Back</a></p>
+	<a href="addCard.php" class="btn btn-primary">Add Card</a>
+    <a href="viewUserDecks.php" class="btn btn-primary">Back</a>
     </div>
    </div>        
   </div>
