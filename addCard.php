@@ -159,7 +159,7 @@
                                             echo "<td>" . $row['Toughness'] . "</td>";									
                                             echo "<td>" . $row['Artist'] . "</td>";
                                             echo "<td>$" . $row['Price'] . "</td>";	
-                                            echo "<td><a href='viewDeck.php?CardName=".$row['Name']."' class='btn btn-primary'>Add</a></td>";									
+                                            echo "<td><a href='viewDeck.php?CardNameAdd=".$row['Name']."' class='btn btn-primary'>Add</a></td>";									
                                         echo "</tr>";
                                     }
                                     echo "</tbody>";                            

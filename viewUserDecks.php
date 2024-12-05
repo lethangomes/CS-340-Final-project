@@ -62,21 +62,22 @@ if(isset($_POST['addDeck'])){
 }
 
 if(isset($_SESSION["Username"]) || isset($_GET["Username"])){
+    // Set parameters
+    if(isset($_GET["Username"])){
+        $param_Username = $_GET["Username"];
+    }
+    else{
+        $param_Username = $_SESSION["Username"];
+    }
 	
     // Prepare a select statement
-    $sql = "SELECT DeckName, Format FROM DECK WHERE Username= ?" ;
+    $sql = "SELECT DeckName, Format, DeckCost(DeckName, '".$param_Username."') AS deckCost FROM DECK WHERE Username= ?" ;
 
 	//$sql = "SELECT EUsername, Pno, Hours From WORKS_ON WHERE EUsername = ? ";   
     if($stmt = mysqli_prepare($link, $sql)){
         // Bind variables to the prepared statement as parameters
         mysqli_stmt_bind_param($stmt, "s", $param_Username);      
-        // Set parameters
-        if(isset($_GET["Username"])){
-            $param_Username = $_GET["Username"];
-        }
-        else{
-            $param_Username = $_SESSION["Username"];
-        }
+        
 
         // Attempt to execute the prepared statement
         if(mysqli_stmt_execute($stmt)){
@@ -89,6 +90,7 @@ if(isset($_SESSION["Username"]) || isset($_GET["Username"])){
                         echo "<tr>";
                             echo "<th>Deckname</th>";
                             echo "<th>Format</th>";
+                            echo "<th>Price</th>";
                         echo "</tr>";
                     echo "</thead>";
                     echo "<tbody>";							
@@ -97,7 +99,7 @@ if(isset($_SESSION["Username"]) || isset($_GET["Username"])){
                         echo "<tr>";
                         echo "<td><a href='viewDeck.php?Username=" . $param_Username . "&DeckName=" .$row['DeckName']. "'>" . $row['DeckName'] . "</a></td>";
                         echo "<td>" . $row['Format'] . "</td>";
-    
+                        echo "<td>$" . $row['deckCost'] . "</td>";
                         echo "</tr>";
                     }
                     echo "</tbody>";                            
