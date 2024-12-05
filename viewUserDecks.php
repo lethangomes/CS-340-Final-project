@@ -55,7 +55,7 @@ if(isset($_SESSION["Username"]) || isset($_GET["Username"])){
     }
 	
     // Prepare a select statement
-    $sql = "SELECT DeckName, Format, DeckCost(DeckName, '".$param_Username."') AS deckCost FROM DECK WHERE Username= ?" ;
+    $sql = "SELECT DeckName, Format, DeckCost(DeckName, '".$param_Username."') AS deckCost, GetTotalCardsInDeck(DeckName, '".$param_Username."') AS cardsInDeck FROM DECK WHERE Username= ?" ;
 
 	//$sql = "SELECT EUsername, Pno, Hours From WORKS_ON WHERE EUsername = ? ";   
     if($stmt = mysqli_prepare($link, $sql)){
@@ -75,6 +75,7 @@ if(isset($_SESSION["Username"]) || isset($_GET["Username"])){
                             echo "<th>Deckname</th>";
                             echo "<th>Format</th>";
                             echo "<th>Price</th>";
+                            echo "<th>Cards in Deck</th>";
                         echo "</tr>";
                     echo "</thead>";
                     echo "<tbody>";							
@@ -84,6 +85,7 @@ if(isset($_SESSION["Username"]) || isset($_GET["Username"])){
                         echo "<td><a href='viewDeck.php?Username=" . $param_Username . "&DeckName=" .$row['DeckName']. "'>" . $row['DeckName'] . "</a></td>";
                         echo "<td>" . $row['Format'] . "</td>";
                         echo "<td>$" . $row['deckCost'] . "</td>";
+                        echo "<td>" . $row['cardsInDeck'] . "</td>";
                         echo "</tr>";
                     }
                     echo "</tbody>";                            
