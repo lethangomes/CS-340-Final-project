@@ -49,16 +49,11 @@
                     // Include config file
                     require_once "config.php";
                     
-                    // Attempt select all employee query execution
-					// *****
-					// Insert your function for Salary Level
-					/*
-						$sql = "SELECT Ssn,Fname,Lname,Salary, Address, Bdate, PayLevel(Ssn) as Level, Super_ssn, Dno
-							FROM EMPLOYEE";
-					*/
+                    // Attempt get all users
                     $sql = "SELECT Username, IsDeveloper, NumDecks(Username) AS NumDecks
 							FROM USER";
                     if($result = mysqli_query($link, $sql)){
+                        //create user table
                         if(mysqli_num_rows($result) > 0){
                             echo "<table class='table table-bordered table-striped'>";
                                 echo "<thead>";
@@ -85,7 +80,7 @@
                             // Free result set
                             mysqli_free_result($result);
                         } else{
-                            echo "<p class='lead'><em>No records were found.</em></p>";
+                            echo "<p class='lead'><em>No Users were found.</em></p>";
                         }
                     } else{
                         echo "ERROR: Could not able to execute $sql. <br>" . mysqli_error($link);

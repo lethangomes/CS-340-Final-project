@@ -95,9 +95,6 @@ if(isset($_SESSION["Username"]) && isset($_SESSION["DeckName"])){
     if(isset($_GET["CardNameAdd"])){
         $sql = "INSERT INTO INCLUDES (NumCopies, CardName, DeckName, Username) 
                 VALUES (1, '".$_GET["CardNameAdd"]."', '".$_SESSION["DeckName"]."', '".$_SESSION["Username"]."')";
-        if(!($result = mysqli_query($link, $sql))){
-            echo "<p>Card already added</p>";
-        } 
     }
 
     // Prepare a select statement

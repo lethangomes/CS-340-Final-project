@@ -45,22 +45,16 @@ if(isset($_GET["Username"]) && !empty(trim($_GET["Username"]))){
 }
 
 
-if(isset($_SESSION["Username"]) || isset($_GET["Username"])){
-    // Set parameters
-    if(isset($_GET["Username"])){
-        $param_Username = $_GET["Username"];
-    }
-    else{
-        $param_Username = $_SESSION["Username"];
-    }
+if(isset($_SESSION["Username"])){
+    $param_Username = $_SESSION["Username"];
 	
     // Prepare a select statement
-    $sql = "SELECT DeckName, Format, DeckCost(DeckName, '".$param_Username."') AS deckCost FROM DECK WHERE Username= ?" ;
+    $sql = "SELECT DeckName, Format, DeckCost(DeckName, ?) AS deckCost FROM DECK WHERE Username= ?" ;
 
 	//$sql = "SELECT EUsername, Pno, Hours From WORKS_ON WHERE EUsername = ? ";   
     if($stmt = mysqli_prepare($link, $sql)){
         // Bind variables to the prepared statement as parameters
-        mysqli_stmt_bind_param($stmt, "s", $param_Username);      
+        mysqli_stmt_bind_param($stmt, "ss", $param_Username,$param_Username);      
         
 
         // Attempt to execute the prepared statement
@@ -90,13 +84,11 @@ if(isset($_SESSION["Username"]) || isset($_GET["Username"])){
                 echo "</table>";				
 				mysqli_free_result($result);
 			} else {
-				echo "No Projects. ";
+				echo "No decks found";
 			}
-//				mysqli_free_result($result);
         } else{
 			// URL doesn't contain valid id parameter. Redirect to error page
-            header("location: error.php");
-            exit();
+            echo "<h2>User not found</h2>";
         }
     }     
     // Close statement

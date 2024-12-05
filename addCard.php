@@ -48,14 +48,29 @@
                     <?php
                     // Include config file
                     require_once "config.php";
+
+                    function get_Types($table, $link, $cardName){
+                        $ret_types = "";
+                        $sql_get_types = "  SELECT * 
+                                                FROM ".$table." AS T
+                                                WHERE T.Card_NAME = ?";
+                        if($stmt = mysqli_prepare($link, $sql_get_types)){
+                            mysqli_stmt_bind_param($stmt, "s", $cardName);
+                            
+                            if(mysqli_stmt_execute($stmt)){
+                                $types = mysqli_stmt_get_result($stmt);
+                                if(mysqli_num_rows($types) > 0){
+                                    while($type = mysqli_fetch_array($types)){
+                                        $ret_types = $ret_types . $type['Typename'] . " ";
+                                    }
+                                }
+                            } 
+                        } 
+
+                        return $ret_types;
+                    }
                     
-                    // Attempt select all employee query execution
-					// *****
-					// Insert your function for Salary Level
-					/*
-						$sql = "SELECT Ssn,Fname,Lname,Salary, Address, Bdate, PayLevel(Ssn) as Level, Super_ssn, Dno
-							FROM EMPLOYEE";
-					*/
+                    // show all cards that can be added to a deck
                     if(isset($_SESSION['Username']) && isset($_SESSION['DeckName'])){
                         $sql = "SELECT *
                                 FROM CARD
@@ -81,78 +96,33 @@
                                             echo "<td>" . $row['Name'] . "</td>";
                                             echo "<td>";
                                         
-                                        //get types
-                                        $sql_get_types = "  SELECT * 
-                                                FROM SUPERTYPES AS T
-                                                WHERE T.Card_NAME = ?";
-                                        if($stmt = mysqli_prepare($link, $sql_get_types)){
-                                            mysqli_stmt_bind_param($stmt, "s", $row['Name']);
-                                            
-                                            if(mysqli_stmt_execute($stmt)){
-                                                $types = mysqli_stmt_get_result($stmt);
-                                                if(mysqli_num_rows($types) > 0){
-                                                    while($type = mysqli_fetch_array($types)){
-                                                        echo "" . $type['Typename'] . " ";
-                                                    }
-                                                }
-                                            }
-                                        }
+                                            //get types
+                                            echo get_Types("SUPERTYPES", $link, $row["Name"]);
+                                            echo get_Types("TYPES", $link, $row["Name"]);
+                                            echo get_Types("SUB_TYPES", $link, $row["Name"]);
 
-                                        $sql_get_types = "  SELECT * 
-                                                FROM TYPES AS T
-                                                WHERE T.Card_NAME = ?";
-                                        if($stmt = mysqli_prepare($link, $sql_get_types)){
-                                            mysqli_stmt_bind_param($stmt, "s", $row['Name']);
-                                            
-                                            if(mysqli_stmt_execute($stmt)){
-                                                $types = mysqli_stmt_get_result($stmt);
-                                                if(mysqli_num_rows($types) > 0){
-                                                    while($type = mysqli_fetch_array($types)){
-                                                        echo "" . $type['Typename'] . " ";
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        
-                                        //get subtypes
-                                        $sql_get_types = "  SELECT * 
-                                                FROM SUB_TYPES AS T
-                                                WHERE T.Card_NAME = ?";
-                                        if($stmt = mysqli_prepare($link, $sql_get_types)){
-                                            mysqli_stmt_bind_param($stmt, "s", $row['Name']);
-                                            
-                                            if(mysqli_stmt_execute($stmt)){
-                                                $types = mysqli_stmt_get_result($stmt);
-                                                if(mysqli_num_rows($types) > 0){
-                                                    while($type = mysqli_fetch_array($types)){
-                                                        if($type['Typename'] != "Instant" && $type['Typename'] != "Artifact")
-                                                        echo "" . $type['Typename'] . " ";
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        echo "</td>";
+                                            echo "</td>";
 
-                                        echo "<td><ul>";
-                                        //get abilities
-                                        $sql_get_abilities = "  SELECT * 
+                                            echo "<td><ul>";
+                                            //get abilities
+                                            $sql_get_abilities = "  SELECT * 
                                                                 FROM ABILITY AS A
                                                                 WHERE A.id in (
                                                                     SELECT id
                                                                     FROM HASABILITY
                                                                     WHERE Name = ?)";
-                                        if($stmt = mysqli_prepare($link, $sql_get_abilities)){
-                                            mysqli_stmt_bind_param($stmt, "s", $row['Name']);
-                                            
-                                            if(mysqli_stmt_execute($stmt)){
-                                                $abilities = mysqli_stmt_get_result($stmt);
-                                                if(mysqli_num_rows($result) > 0){
-                                                    while($ability = mysqli_fetch_array($abilities)){
-                                                        echo "<li><b>" . $ability['Name'] . "</b> - " . $ability['Description'] . "</li>";
+                                            if($stmt = mysqli_prepare($link, $sql_get_abilities)){
+                                                mysqli_stmt_bind_param($stmt, "s", $row['Name']);
+                                                
+                                                if(mysqli_stmt_execute($stmt)){
+                                                    $abilities = mysqli_stmt_get_result($stmt);
+                                                    if(mysqli_num_rows($result) > 0){
+                                                        while($ability = mysqli_fetch_array($abilities)){
+                                                            echo "<li><b>" . $ability['Name'] . "</b> - " . $ability['Description'] . "</li>";
+                                                        }
                                                     }
                                                 }
                                             }
-                                        }
                                             echo "</ul></td>";
                                             echo "<td>" . $row['Flavor'] . "</td>";
                                             echo "<td>" . $row['Power'] . "</td>";

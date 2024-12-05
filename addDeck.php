@@ -31,6 +31,7 @@
 </head>
 
 <?php
+        //attempt to add deck
         $msg = "";
         if(isset($_POST['deckName']) && isset($_POST['format'])){
             if($_POST['deckName'] != "" && $_POST['format'] != ""){
@@ -39,13 +40,15 @@
                 if($stmt = mysqli_prepare($link, $sql)){
                     mysqli_stmt_bind_param($stmt, "sss", $_POST['deckName'], $_POST['format'], $_SESSION['Username']); 
                     if(mysqli_stmt_execute($stmt)){
+                        //redirect to user decks
                         header("location: viewUserDecks.php");
                     } else{
-                        $msg = "Invalid deck name";
+                        $msg = "Deck name already in use for this user";
                     }
                 }
             }
             else{
+                //print error message if fields empty.
                 if($_POST['deckName'] == ""){
                     $msg = "Please insert deck name<br>";
                 }
@@ -54,6 +57,7 @@
                 }
             }
         }
+        mysqli_close($link);
 ?>
 
 <body>
