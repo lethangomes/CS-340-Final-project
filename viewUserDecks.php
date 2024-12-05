@@ -44,6 +44,21 @@ if(isset($_GET["Username"]) && !empty(trim($_GET["Username"]))){
 	$_SESSION["Username"] = $_GET["Username"];
 }
 
+if(isset($_GET["DeleteDeck"])){
+    $sql = "DELETE FROM DECK WHERE DeckName = ? AND Username = ?";
+
+    if($stmt = mysqli_prepare($link, $sql)) {
+        // Bind variables to the prepared statement as parameters
+        mysqli_stmt_bind_param($stmt, "ss",  $param_DeckName, $param_Username);      
+        // Set parameters
+        $param_DeckName = $_GET["DeleteDeck"];
+        $param_Username = $_SESSION["Username"];
+
+
+        // execute update
+        mysqli_stmt_execute($stmt);
+    }
+}
 
 if(isset($_SESSION["Username"])){
     $param_Username = $_SESSION["Username"];
@@ -82,6 +97,7 @@ if(isset($_SESSION["Username"])){
                         echo "<td>" . $row['Format'] . "</td>";
                         echo "<td>$" . $row['deckCost'] . "</td>";
                         echo "<td>" . $row['cardsInDeck'] . "</td>";
+                        echo "<td><a href='viewUserDecks.php?DeleteDeck=".$row['DeckName']."' data-toggle='tooltip'><span class='glyphicon glyphicon-trash'></span></a></td>";
                         echo "</tr>";
                     }
                     echo "</tbody>";                            
