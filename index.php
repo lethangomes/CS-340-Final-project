@@ -50,8 +50,9 @@
                     require_once "config.php";
                     
                     // Attempt get all users
-                    $sql = "SELECT Username, IsDeveloper, NumDecks(Username) AS NumDecks
-							FROM USER";
+                    $sql = "SELECT Username, IsDeveloper, COUNT(DeckName) AS NumDecks
+							FROM USER NATURAL LEFT JOIN DECK
+                            GROUP BY Username";
                     if($result = mysqli_query($link, $sql)){
                         //create user table
                         if(mysqli_num_rows($result) > 0){
