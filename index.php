@@ -90,6 +90,7 @@
                     // Close connection
                     mysqli_close($link);
                     ?>
+                    <a href="cards.php" class="btn btn-primary">View Cards</a></p>
                 </div>
 
 </body>
